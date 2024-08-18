@@ -1,29 +1,33 @@
 import math
 def solution(numbers):
     answer = 0
-    num_list = list(numbers)
-    checked = [False] * len(num_list)
-    arr = set()
-    def dfs(current):
-        nonlocal checked
-        if current:
-            arr.add(int(current))
-        for i in range(len(checked)):
-            if not checked[i]:
-                checked[i] = True
-                dfs(current+num_list[i])
-                checked[i] = False
-    dfs("")
-    for num in arr:
-        check = True
-        if num == 1 or num == 0:
+    check = [False] * len(numbers)
+    number_set = set()
+    def dfs(idx, number):
+        if number:
+            number_set.add(int(number))
+        
+        if idx == len(numbers):
+            return
+        
+        for i in range(len(numbers)):
+            if not check[i]:
+                check[i] = True
+                dfs(idx + 1, number + numbers[i])
+                check[i] = False
+        
+    dfs(0, "")
+    while number_set:
+        number = number_set.pop()
+        if number == 0 or number == 1:
             continue
-        else:
-            era = int(math.sqrt(num))
-            for j in range(2, era + 1):
-                if num % j == 0:
-                    check = False
-                    break
-            if check:
-                answer += 1
+        era = int(math.sqrt(number))
+        check = True
+        for j in range(2, era + 1):
+            if number % j == 0:
+                check = False
+                break
+        if check:
+            answer += 1
+        
     return answer
